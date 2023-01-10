@@ -1,0 +1,54 @@
+services:
+    api:
+        build:
+            context: ./api/Presentation
+        ports:
+            - 81:81
+        volumes:
+            - './api/Presentation/:/app/'
+        depends_on:
+            - rabbit
+            - mongo
+            - redis
+    
+    #eventbushandler:
+    #    build:
+    #        context: ./api/EventBusHandler
+    #    volumes:
+    #        - './api/EventBusHandler/:/app/'
+    #    depends_on:
+    #        - db
+    #        - rabbit
+    #        - mongo
+    #        - minio
+    
+    front:
+        build:
+            context: ./web
+        ports:
+            - 80:80
+        environment:
+            - PORT=80
+            - WATCHPACK_POLLING=true
+        volumes:
+            - './web/:/app/'
+        depends_on:
+            - api
+    
+    rabbit:
+        image: rabbitmq:3-management
+        ports:
+            - 5671:5671
+            - 5672:5672
+            - 15672:15672
+    
+    mongo:
+        image: mongo
+        ports:
+            - 27017:27017
+    
+    redis:
+        image: redis
+        ports:
+            - 6379:6379
+    
