@@ -1,9 +1,7 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import {Game} from './Entities/Game';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
-import {GetIn, TicTacGame} from './Components';
+import {GameEnd, GetIn, TicTacGame} from './Components';
 
 function App() {
     return (
@@ -11,7 +9,8 @@ function App() {
             <div className="Header">
                 <BrowserRouter>
                     <Routes>
-                        <Route path={'/:figure?'} element={<GetIn/>}/>
+                        <Route path={'/'} element={<GetIn/>}/>
+                        <Route path={'/gameEnd/:winner'} element={<GameEnd/>}/>
                         <Route path={"/:figure/:id"} element={<TicTacGame/>}/>
                     </Routes>
                 </BrowserRouter>

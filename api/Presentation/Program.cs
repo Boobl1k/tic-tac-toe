@@ -1,10 +1,12 @@
 using Presentation.Data;
+using Presentation.RabbitMq;
 using Presentation.SignalR.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddSingleton<GameUpdateProducer>();
 builder.Services.AddSingleton<MongoDbContext>();
 
 builder.Services.AddControllers();

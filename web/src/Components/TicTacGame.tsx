@@ -1,14 +1,15 @@
 ﻿import {useEffect, useMemo, useState} from "react";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {Cell} from "./Cell";
 import {Figure, Game} from "../Entities/Game"
-import axios from '../axios'
 import {whoseMove} from "../Domain/gameDomain";
 import {HubConnection, HubConnectionBuilder} from "@microsoft/signalr";
 import {BASE_URL} from "../config";
+import {WhoWon} from "./GameEnd";
 
 export const TicTacGame = () => {
     const {figure, id} = useParams();
+    const navigate = useNavigate();
 
     const [game, setGame] = useState<Game>({cells: [[0, 0, 0], [0, 0, 0], [0, 0, 0]], id: id || ''});
     const [connection, setConnection] = useState<null | HubConnection>(null);
@@ -30,6 +31,9 @@ export const TicTacGame = () => {
                     connection.on('UpdateGame', (game: Game) => {
                         setGame(game);
                     });
+                    connection.on("GameFinish", (winner: Figure) => {
+                        navigate(`/gameEnd/${winner === Figure.None ? WhoWon.Tie : winner === (figure === 'x' ? Figure.X : Figure.O) ? WhoWon.Me : WhoWon.Opponent}`)
+                    })
                     if (id)
                         connection.invoke("Enter", id);
                 })

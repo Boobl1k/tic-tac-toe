@@ -9,18 +9,15 @@ services:
         depends_on:
             - rabbit
             - mongo
-            - redis
     
-    #eventbushandler:
-    #    build:
-    #        context: ./api/EventBusHandler
-    #    volumes:
-    #        - './api/EventBusHandler/:/app/'
-    #    depends_on:
-    #        - db
-    #        - rabbit
-    #        - mongo
-    #        - minio
+    eventbushandler:
+        build:
+            context: ./api/EventBusHandler
+        volumes:
+            - './api/EventBusHandler/:/app/'
+        depends_on:
+            - rabbit
+            - mongo
     
     front:
         build:
@@ -46,9 +43,4 @@ services:
         image: mongo
         ports:
             - 27017:27017
-    
-    redis:
-        image: redis
-        ports:
-            - 6379:6379
     
